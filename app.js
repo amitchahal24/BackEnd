@@ -1,6 +1,3 @@
-// Amit Chahal - 0003832
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -20,7 +17,8 @@ mongoose
 
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true }
+    email: { type: String, required: true },
+    org: { type: String, required: true }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -31,8 +29,8 @@ const User = mongoose.model('User', userSchema);
 app.post('/users', async(req, res) => {
     try {
         console.log(req.body);
-        const { name, email } = req.body;
-        const user = new User({ name, email });
+        const { name, email, org } = req.body;
+        const user = new User({ name, email, org });
         await user.save();
         res.status(201).send(user);
     } catch (error) {
@@ -69,8 +67,8 @@ app.get('/users/:id', async(req, res) => {
 app.put('/users/:id', async(req, res) => {
     try {
         const { id } = req.params;
-        const { name, email } = req.body;
-        const user = await User.findByIdAndUpdate(id, { name, email }, { new: true });
+        const { name, email, org } = req.body;
+        const user = await User.findByIdAndUpdate(id, { name, email, org }, { new: true });
         if (!user) {
             return res.status(404).send('User not found');
         }
